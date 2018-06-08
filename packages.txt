@@ -1,0 +1,9 @@
+python=2.7
+tensorflow=1.5
+jieba=0.39
+keras=2.1.6
+gensim=3.4.0
+pandas=0.22.0
+#sklearn=0.19.1
+#xgboost=0.71
+#lightgbm=2.1.1
