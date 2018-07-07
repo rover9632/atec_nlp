@@ -6,6 +6,7 @@ import re
 import random
 import sys
 
+# this function is not needed for now
 def train_test_split(in_data_paths, test_size=0.1):
     x = []
     for fpath in in_data_paths:
@@ -25,15 +26,23 @@ def train_test_split(in_data_paths, test_size=0.1):
                 i += 1
     pass
 
-def data2corpus(data_path, corpus_path, wordlevel=False):
+def load_data(data_paths):
+    data = []
+    for fpath in data_paths:
+        with open(fpath) as f:
+            for line in f:
+                data.append(line)
+    return data
+
+def data2corpus(data, corpus_path, wordlevel=False):
     with open('./data/punctuations.txt') as f:
         punctuations = f.read().decode('utf-8').split()
 
     if wordlevel:
         jb.load_userdict('./data/dict.txt')
 
-    with open(data_path) as fi, open(corpus_path, 'w') as fo:
-        for line in fi:
+    with open(corpus_path, 'w') as fo:
+        for line in data:
             line = re.sub(u'[。？！.?!]', u'\n', line.decode('utf-8'))
             _, sen1, sen2, _ = line.split(u'\t')
             if wordlevel:
@@ -47,5 +56,7 @@ def data2corpus(data_path, corpus_path, wordlevel=False):
 
 if __name__ == '__main__':
     #train_test_split(sys.argv[1:])
-    data2corpus('./data/train.csv', './data/corpus_char.txt')
-    data2corpus('./data/train.csv', './data/corpus_word.txt', True)
+    data_paths = ['./data/atec_nlp_sim_train.csv', './data/atec_nlp_sim_train_add.csv']
+    data = load_data(data_paths)
+    data2corpus(data, './data/corpus_char.txt')
+    data2corpus(data, './data/corpus_word.txt', True)
