@@ -125,6 +125,17 @@ class DataSet(object):
         x1_val, x2_val, y_val = self.x1[slice], self.x2[slice], self.y[slice]
         return ([x1_train, x2_train], y_train), ([x1_val, x2_val], y_val)
 
+    def random_split(self, val_size=0.1):
+        n_samples = len(self.y)
+        inds = np.arange(n_samples)
+        np.random.shuffle(inds)
+        val_inds = inds[:int(n_samples*val_size)]
+        x1_train = np.delete(self.x1, val_inds, axis=0)
+        x2_train = np.delete(self.x2, val_inds, axis=0)
+        y_train = np.delete(self.y, val_inds, axis=0)
+        x1_val, x2_val, y_val = self.x1[val_inds], self.x2[val_inds], self.y[val_inds]
+        return ([x1_train, x2_train], y_train), ([x1_val, x2_val], y_val)
+
     def get_emb_matrix(self):
         emb_matrix = np.random.uniform(-0.01, 0.01, size=(len(self.vocab), 300))
         for w,i in self.vocab.items():
